@@ -12,13 +12,13 @@ The customer information that is exchanged between FIs is flexible but the typic
  - Date of birth
  - Physical address
 
-The Compliance Protocol is an additional step after [federation](https://www.stellar.org/developers/guides/concepts/federation.html). In this step the sending FI contacts the receiving FI to get permission to send the transaction. To do this the receiving FI creates an `AUTH_SERVER` and adds its location to the [stellar.toml](https://www.stellar.org/developers/guides/concepts/stellar-toml.html) of the FI.
+The Compliance Protocol is an additional step after [federation](https://www.payshares.org/developers/guides/concepts/federation.html). In this step the sending FI contacts the receiving FI to get permission to send the transaction. To do this the receiving FI creates an `AUTH_SERVER` and adds its location to the [payshares.toml](https://www.payshares.org/developers/guides/concepts/payshares-toml.html) of the FI.
 
-You can create your own endpoint that implements the compliance protocol or we have also created this [simple compliance service](https://github.com/stellar/bridge-server/blob/master/readme_compliance.md) that you can use.
+You can create your own endpoint that implements the compliance protocol or we have also created this [simple compliance service](https://github.com/payshares/bridge-server/blob/master/readme_compliance.md) that you can use.
 
 ## AUTH_SERVER
 
-The `AUTH_SERVER` provides one endpoint that is called by a sending FI to get approval to send a payment to one of the receiving FI's customers. The `AUTH_SERVER` url should be placed in organization's [stellar.toml](https://www.stellar.org/developers/guides/concepts/stellar-toml.html) file.
+The `AUTH_SERVER` provides one endpoint that is called by a sending FI to get approval to send a payment to one of the receiving FI's customers. The `AUTH_SERVER` url should be placed in organization's [payshares.toml](https://www.payshares.org/developers/guides/concepts/payshares-toml.html) file.
 
 #### Request
 
@@ -33,10 +33,10 @@ Name | Data Type | Description
 -----|-----------|------------
 `sender` | string | The payment address of the customer that is initiating the send. Ex. `bob*bank.com`
 `need_info` | boolean | If the caller needs the recipient's AML info in order to send the payment.
-`tx` | string: base64 encoded [xdr.Transaction](https://github.com/stellar/stellar-core/blob/4961b8bb4a64c68838632c5865389867e9f02840/src/xdr/Stellar-transaction.x#L297-L322) | The transaction that the sender would like to send in XDR format. This transaction is unsigned and it's sequence number should be equal `0`.
-`attachment` | string | The full text of the attachment. The hash of this attachment is included as a memo in the transaction. The **attachment** field follows the [Stellar Attachment Convention](./attachment.md) and should contain at least enough information of the sender to allow the receiving FI to do their sanction check.
+`tx` | string: base64 encoded [xdr.Transaction](https://github.com/payshares/payshares-core/blob/4961b8bb4a64c68838632c5865389867e9f02840/src/xdr/Payshares-transaction.x#L297-L322) | The transaction that the sender would like to send in XDR format. This transaction is unsigned and it's sequence number should be equal `0`.
+`attachment` | string | The full text of the attachment. The hash of this attachment is included as a memo in the transaction. The **attachment** field follows the [Payshares Attachment Convention](./attachment.md) and should contain at least enough information of the sender to allow the receiving FI to do their sanction check.
 
-**sig** is the signature of the data block made by the sending FI. The receiving institution should check that this signature is valid against the public signature key that is posted in the sending FI's [stellar.toml](https://www.stellar.org/developers/guides/concepts/stellar-toml.html) (`SIGNING_KEY` field).
+**sig** is the signature of the data block made by the sending FI. The receiving institution should check that this signature is valid against the public signature key that is posted in the sending FI's [payshares.toml](https://www.payshares.org/developers/guides/concepts/payshares-toml.html) (`SIGNING_KEY` field).
 
 Example request body (please note it contains both parameters `data` and `sig`):
 ```
@@ -89,9 +89,9 @@ In this example, Aldi `aldi*bankA.com` wants to send to Bogart `bogart*bankB.com
 
 **1) BankA gets the info needed to interact with BankB**
 
-This is done by looking up BankB's `stellar.toml` file.
+This is done by looking up BankB's `payshares.toml` file.
 
-BankA  -> fetches `https://bankB.com/.well-known/stellar.toml`
+BankA  -> fetches `https://bankB.com/.well-known/payshares.toml`
 
 from this .toml file it pulls out the following info for BankB:
  - `FEDERATION_SERVER`
@@ -103,14 +103,14 @@ This is done by asking BankB's federation server to resolve `bogart*bankB.com`.
 
 BankA -> `FEDERATION_SERVER?type=name&q=bogart*bankB.com`
 
-See [Federation](https://www.stellar.org/developers/guides/concepts/federation.html) for a complete description. The returned fields of interest here are:
- - Stellar AccountID of Bogart's FI
+See [Federation](https://www.payshares.org/developers/guides/concepts/federation.html) for a complete description. The returned fields of interest here are:
+ - Payshares AccountID of Bogart's FI
  - Bogart's routing info
 
 Example federation response:
 ```json
 {
-  "stellar_address": "bogart*bankB.com",
+  "payshares_address": "bogart*bankB.com",
   "account_id": "GDJ2GYMIQRIPTJZXQAVE5IM675ITLBAMQJS7AEFIWM4HZNGHVXOZ3TZK",
   "memo_type": "id",
   "memo": 1
@@ -139,12 +139,12 @@ After decoding `data` parameter it has a following form:
 }
 ```
 
-Please note that memo value of `tx` is the sha256 hash of the attachment and payment destination is returned by the federation server. You can check the transaction above using the [XDR Viewer](https://www.stellar.org/laboratory/#xdr-viewer?input=AAAAAEhAArfpmUJYq%2FQ9SFAH3YDzNLJEBI9i9TXmJ7s608xbAAAAZAAMon0AAAAJAAAAAAAAAAPUg1%2FwDrMDozn8yfiCA8LLC0wF10q5n5lo0GiFQXpPsAAAAAEAAAAAAAAAAQAAAADdvkoXq6TXDV9IpguvNHyAXaUH4AcCLqhToJpaG6cCyQAAAAAAAAAAAJiWgAAAAAA%3D&type=Transaction&network=test).
+Please note that memo value of `tx` is the sha256 hash of the attachment and payment destination is returned by the federation server. You can check the transaction above using the [XDR Viewer](https://www.payshares.org/laboratory/#xdr-viewer?input=AAAAAEhAArfpmUJYq%2FQ9SFAH3YDzNLJEBI9i9TXmJ7s608xbAAAAZAAMon0AAAAJAAAAAAAAAAPUg1%2FwDrMDozn8yfiCA8LLC0wF10q5n5lo0GiFQXpPsAAAAAEAAAAAAAAAAQAAAADdvkoXq6TXDV9IpguvNHyAXaUH4AcCLqhToJpaG6cCyQAAAAAAAAAAAJiWgAAAAAA%3D&type=Transaction&network=test).
 
 **4) BankB handles the Auth request**
 
  - BankB gets sender domain by spliting the sender address (`aldi*bankA.com`) in 2 parts: `aldi` and `bankA.com`
- - BankB -> fetches `https://bankA.com/.well-known/stellar.toml`
+ - BankB -> fetches `https://bankA.com/.well-known/payshares.toml`
    From this it gets BankA's `SIGNING_KEY`
  - BankB verifies the signature on the Auth Request was signed with BankA's `SIGNING_KEY`
  - BankB does its sanction check on Aldi. This determines the value of `tx_status`.
@@ -174,7 +174,7 @@ If the call to the AUTH_SERVER returned `pending`, BankA must resubmit the reque
 
 **6) BankA does the sanction checks**
 
-Once BankA has been given the `dest_info` from BankB, BankA does the sanction check using this AML info of Bogart. If the sanction check passes, BankA signs and submits the transaction to the Stellar network.
+Once BankA has been given the `dest_info` from BankB, BankA does the sanction check using this AML info of Bogart. If the sanction check passes, BankA signs and submits the transaction to the Payshares network.
 
 
 **7) BankB handles the incoming payment.**

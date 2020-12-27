@@ -5,18 +5,18 @@ sequence:
   next: 4-compliance-server.md
 ---
 
-When testing the bridge server, we added a `memo` to the transaction in order to identify what customer account to credit. However, other people and organizations using Stellar might not know they need to do that. How do they find out?
+When testing the bridge server, we added a `memo` to the transaction in order to identify what customer account to credit. However, other people and organizations using Payshares might not know they need to do that. How do they find out?
 
-The [Stellar federation protocol](../concepts/federation.md) allows you to convert a human-readable address like `amy*your_org.com`[^friendly_names] to an account ID. It also includes information about what should be in a transaction’s `memo`. When sending a payment, you contact a federation server first to determine what Stellar account ID to pay. Luckily, the bridge server does this for you.
+The [Payshares federation protocol](../concepts/federation.md) allows you to convert a human-readable address like `amy*your_org.com`[^friendly_names] to an account ID. It also includes information about what should be in a transaction’s `memo`. When sending a payment, you contact a federation server first to determine what Payshares account ID to pay. Luckily, the bridge server does this for you.
 
 ![Payment flow diagram](assets/anchor-send-payment-federation.png)
 
-Stellar.org provides a [prebuilt federation server](https://github.com/stellar/go/tree/master/services/federation) that can hook into an existing user database, but you can also write your own.
+Payshares.org provides a [prebuilt federation server](https://github.com/payshares/go/tree/master/services/federation) that can hook into an existing user database, but you can also write your own.
 
 
 ## Create a Database
 
-The Stellar federation server is designed to connect to any existing SQL database you might have with a list of account names. It essentially translates a federation request into a SQL query. The server supports MySQL, PostgreSQL, and SQLite3.
+The Payshares federation server is designed to connect to any existing SQL database you might have with a list of account names. It essentially translates a federation request into a SQL query. The server supports MySQL, PostgreSQL, and SQLite3.
 
 At a minimum, your database should have a table with a column identifying the name to use for each account record.[^federation_tables] In your existing system, you might have a table named `accounts` that looks something like:
 
@@ -28,12 +28,12 @@ At a minimum, your database should have a table with a column identifying the na
 | 4  | Steintór   | Jákupsson | steintor_jakupsson  |
 | 5  | Sneha      | Kapoor    | sneha_kapoor        |
 
-Where Tunde’s Stellar address would be `tunde_adebayo*your_org.com`.
+Where Tunde’s Payshares address would be `tunde_adebayo*your_org.com`.
 
 
 ## Download and Configure Federation Server
 
-Next, [download the latest federation server](https://github.com/stellar/go/releases) for your platform. Install the executable anywhere you like. In the same directory, create a file named `federation.cfg`. This will store the configuration for the server. It should look something like:
+Next, [download the latest federation server](https://github.com/payshares/go/releases) for your platform. Install the executable anywhere you like. In the same directory, create a file named `federation.cfg`. This will store the configuration for the server. It should look something like:
 
 <code-example name="federation.cfg">
 
@@ -60,11 +60,11 @@ private-key-file = "server.key"
 
 Make sure to update the database connection information with the proper credentials and name for your database. Also update the value of `domain` in the `federation` query to match your actual domain instead of `your_org.com`.
 
-The `federation` query is a SQL query that should return the columns `id`, `memo`, and `memo_type` when supplied with the two parts of a Stellar address, e.g. `tunde_adeboyo` and `your_org.com` for the address `tunde_adebayo*your_org.com`.
+The `federation` query is a SQL query that should return the columns `id`, `memo`, and `memo_type` when supplied with the two parts of a Payshares address, e.g. `tunde_adeboyo` and `your_org.com` for the address `tunde_adebayo*your_org.com`.
 
 Since we are mapping all addresses to our base account, we always return the base account ID for `id`. As in the first section, we want the account’s `friendly_id` as a text memo.
 
-The `reverse-federation` query is required, but because all customer accounts map to a single Stellar account in our design, we need to make sure this query always returns no rows.
+The `reverse-federation` query is required, but because all customer accounts map to a single Payshares account in our design, we need to make sure this query always returns no rows.
 
 Now run the server! (Unlike the bridge server, there’s there no custom database to migrate.)
 
@@ -73,15 +73,15 @@ Now run the server! (Unlike the bridge server, there’s there no custom databas
 ```
 
 
-## Update Stellar.toml
+## Update Payshares.toml
 
-Finally, others have to know the URL of your federation server. The [`stellar.toml` file](../concepts/stellar-toml.md) is publicly available file where others can find information about your Stellar integration. It should always be stored at:
+Finally, others have to know the URL of your federation server. The [`payshares.toml` file](../concepts/payshares-toml.md) is publicly available file where others can find information about your Payshares integration. It should always be stored at:
 
-`https://[YOUR DOMAIN]/.well-known/stellar.toml`
+`https://[YOUR DOMAIN]/.well-known/payshares.toml`
 
-It can list all sorts of properties, but the one we care about now is the URL for your federation server. Your `stellar.toml` file should look something like:
+It can list all sorts of properties, but the one we care about now is the URL for your federation server. Your `payshares.toml` file should look something like:
 
-<code-example name="stellar.toml">
+<code-example name="payshares.toml">
 
 ```toml
 FEDERATION_SERVER = "https://www.your_org.com:8002/federation"
@@ -151,7 +151,7 @@ You should get a response like:
 
 ```json
 {
-  "stellar_address": "tunde_adebayo*your_org.com",
+  "payshares_address": "tunde_adebayo*your_org.com",
   "account_id": "GAIGZHHWK3REZQPLQX5DNUN4A32CSEONTU6CMDBO7GDWLPSXZDSYA4BU",
   "memo_type": "text",
   "memo": "tunde_adebayo"

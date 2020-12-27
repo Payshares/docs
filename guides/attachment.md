@@ -1,10 +1,10 @@
 ---
-title: Stellar Attachment Convention
+title: Payshares Attachment Convention
 ---
 
 # Attachments
 
-Sometimes there is a need to send more information about a transaction than fits in the provided memo field, for example: KYC info, an invoice, a short note. Such data shouldn't be placed in the [ledger](./concepts/ledger.md) because of it's size or private nature. Instead, you should create what we call an `Attachment`. A Stellar attachment is simply a JSON document. The sha256 hash of this attachment is included as a memo hash in the transaction. The actual attachment document can be sent to the receiver through some other channel, most likely through the receiver's [Auth server](./compliance-protocol.md).
+Sometimes there is a need to send more information about a transaction than fits in the provided memo field, for example: KYC info, an invoice, a short note. Such data shouldn't be placed in the [ledger](./concepts/ledger.md) because of it's size or private nature. Instead, you should create what we call an `Attachment`. A Payshares attachment is simply a JSON document. The sha256 hash of this attachment is included as a memo hash in the transaction. The actual attachment document can be sent to the receiver through some other channel, most likely through the receiver's [Auth server](./compliance-protocol.md).
 
 ## Attachment structure
 
@@ -62,7 +62,7 @@ hash.update(JSON.stringify(attachment));
 var memoHashHex = hash.digest('hex');
 ```
 
-To add the hash to your transaction use the [`TransactionBuilder.addMemo`](http://stellar.github.io/js-stellar-base/TransactionBuilder.html#addMemo) method.
+To add the hash to your transaction use the [`TransactionBuilder.addMemo`](http://payshares.github.io/js-payshares-base/TransactionBuilder.html#addMemo) method.
 
 ## Sending Attachments
 

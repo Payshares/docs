@@ -1,11 +1,11 @@
-Stellar Docs
+Payshares Docs
 ============
 
-This repository is home to the Stellar documentation. These docs feed into the [Stellar developers site builder](https://github.com/stellar/developers) and is on display at [stellar.org/developers](https://www.stellar.org/developers/).
+This repository is home to the Payshares documentation. These docs feed into the [Payshares developers site builder](https://github.com/payshares/developers) and is on display at [payshares.org/developers](https://www.payshares.org/developers/).
 
 ## How to write docs
 
-There are a few conventions when writing docs that go into the Stellar Developers site. Most the docs are written in markdown format. For an introduction of what Markdown is, take a look at [Github's Mastering Markdown Guide](https://guides.github.com/features/mastering-markdown/).
+There are a few conventions when writing docs that go into the Payshares Developers site. Most the docs are written in markdown format. For an introduction of what Markdown is, take a look at [Github's Mastering Markdown Guide](https://guides.github.com/features/mastering-markdown/).
 
 ### Headers
 
@@ -66,18 +66,18 @@ There are three different kind of links, and each different kind of link has a s
       <td>Root relative</td>
       <td><ul><li>when you want to use the github file viewer (like for source files)</li></ul></td>
       <td>/src/ledger/AccountFrame.cpp</td>
-      <td>https://github.com/stellar/CURRENT-REPOSITORY/tree/master/src</td>
+      <td>https://github.com/payshares/CURRENT-REPOSITORY/tree/master/src</td>
     </tr>
     <tr>
       <td>Absolute links</td>
       <td>
         <ul>
-          <li>cross repository links (should link to the dev portal at www.stellar.org/developers/)</li>
+          <li>cross repository links (should link to the dev portal at www.payshares.org/developers/)</li>
           <li>links to external sites (like https://www.google.com/)</li>
         </ul>
       </td>
-      <td>https://www.stellar.org/developers/js-stellar-base/learn/building-transactions.html</td>
-      <td>https://www.stellar.org/developers/js-stellar-base/learn/building-transactions.html</td>
+      <td>https://www.payshares.org/developers/js-payshares-base/learn/building-transactions.html</td>
+      <td>https://www.payshares.org/developers/js-payshares-base/learn/building-transactions.html</td>
     </tr>
   </tbody>
 </table>
@@ -86,10 +86,10 @@ There are three different kind of links, and each different kind of link has a s
 
 Sometimes we want to include other types of content such as `.pdf`'s. To add front matter to the pdf, create a sibling file with the pdf file name and an added extension of `.metadata`. This file can then define metadata for the title of the `.pdf`.
 
-An example can be seen in [stellar-core's software folder](https://github.com/stellar/stellar-core/tree/master/docs/software).
+An example can be seen in [payshares-core's software folder](https://github.com/payshares/payshares-core/tree/master/docs/software).
 
 ## Contributing
 
-Your contributions to the Stellar network will help improve the world’s financial infrastructure, faster.
+Your contributions to the Payshares network will help improve the world’s financial infrastructure, faster.
 
-We want to make it as easy as possible to contribute changes that help the Stellar network grow and thrive. There are a few guidelines that we ask contributors to follow so that we can merge your changes quickly. Please read our [Contribution Guide](https://github.com/stellar/docs/blob/master/CONTRIBUTING.md) and sign our [Contributor License Agreement](https://docs.google.com/forms/d/1g7EF6PERciwn7zfmfke5Sir2n10yddGGSXyZsq98tVY/viewform).
+We want to make it as easy as possible to contribute changes that help the Payshares network grow and thrive. There are a few guidelines that we ask contributors to follow so that we can merge your changes quickly. Please read our [Contribution Guide](https://github.com/payshares/docs/blob/master/CONTRIBUTING.md) and sign our [Contributor License Agreement](https://docs.google.com/forms/d/1g7EF6PERciwn7zfmfke5Sir2n10yddGGSXyZsq98tVY/viewform).

@@ -2,11 +2,11 @@
 title: Ledger
 ---
 
-A **ledger** represents the state of the Stellar universe at a given point in time. It contains the list of all the accounts and balances, all the orders in the distributed exchange, and any other data that persists.
+A **ledger** represents the state of the Payshares universe at a given point in time. It contains the list of all the accounts and balances, all the orders in the distributed exchange, and any other data that persists.
 
 The first ledger in the history of the network is called the genesis ledger.
 
-Every [Stellar Consensus Protocol (SCP)](https://www.stellar.org/developers/learn/concepts/scp.html) round, the network reaches consensus on which [transaction set](./transactions.md#transaction-set) to apply to the last closed ledger; when the new set is applied, a new "last closed ledger" is defined.
+Every [Payshares Consensus Protocol (SCP)](https://www.payshares.org/developers/learn/concepts/scp.html) round, the network reaches consensus on which [transaction set](./transactions.md#transaction-set) to apply to the last closed ledger; when the new set is applied, a new "last closed ledger" is defined.
 
 Each ledger is cryptographically linked to a unique previous ledger, creating a historical ledger chain that goes back to the genesis ledger.
 
@@ -22,7 +22,7 @@ You can think of the historical ledger chain as a linked list of ledger headers:
 [Genesis] <---- [LedgerHeader_1] <----- ... <---- [LedgerHeader_n]
 
 See the protocol file for the object definitions.
-[`src/xdr/Stellar-ledger.x`](https://github.com/stellar/stellar-core/blob/master/src/xdr/Stellar-ledger.x)
+[`src/xdr/Payshares-ledger.x`](https://github.com/payshares/payshares-core/blob/master/src/xdr/Payshares-ledger.x)
 
 Every ledger header has the following fields:
 
@@ -40,13 +40,13 @@ Every ledger header has the following fields:
 
 - **Transaction set result hash**: Hash of the results of applying the transaction set. This data is not, strictly speaking, necessary for validating the results of the transactions. However, this data makes it easier for entities to validate the result of a given transaction without having to apply the transaction set to the previous ledger.
 
-- **Bucket list hash**: Hash of all the objects in this ledger. The data structure that contains all the objects is called the [bucket list](https://github.com/stellar/stellar-core/tree/master/src/bucket).
+- **Bucket list hash**: Hash of all the objects in this ledger. The data structure that contains all the objects is called the [bucket list](https://github.com/payshares/payshares-core/tree/master/src/bucket).
 
 - **Ledger sequence**: The sequence number of this ledger.
 
-- **Total coins**: Total number of lumens in existence.
+- **Total coins**: Total number of stakks in existence.
 
-- **Fee pool**: Number of lumens that have been paid in fees. This number will be added to the inflation pool and reset to 0 the next time inflation runs. Note this is denominated in lumens, even though a transaction’s [`fee`](./transactions.md#fee) field is in stroops.
+- **Fee pool**: Number of stakks that have been paid in fees. This number will be added to the inflation pool and reset to 0 the next time inflation runs. Note this is denominated in stakks, even though a transaction’s [`fee`](./transactions.md#fee) field is in stroops.
 
 - **Inflation sequence**: Number of times inflation has been run.
 
@@ -54,7 +54,7 @@ Every ledger header has the following fields:
 
 - **Maximum Number of Transactions**: The maximum number of [transactions](./transactions.md) the validators have agreed to process in a given ledger. If more transactions are submitted than this number, the validators will include those with the highest fees.
 
-- **Base fee**: The [fee](./fees.md#transaction-fee) the network charges per [operation](./operations.md) in a [transaction](./transactions.md). This field is in stroops, which are 1/10,000,000th of a lumen.
+- **Base fee**: The [fee](./fees.md#transaction-fee) the network charges per [operation](./operations.md) in a [transaction](./transactions.md). This field is in stroops, which are 1/10,000,000th of a stakk.
 
 - **Base reserve**: The [reserve](./fees.md#minimum-account-balance) the network uses when calculating an account's minimum balance.
 
@@ -65,13 +65,13 @@ Every ledger header has the following fields:
 # Ledger Entries
 
 The ledger is a collection of **entries**. Currently there are 4 types of ledger entries. They're specified in
-[`src/xdr/Stellar-ledger-entries.x`](https://github.com/stellar/stellar-core/blob/master/src/xdr/Stellar-ledger-entries.x).
+[`src/xdr/Payshares-ledger-entries.x`](https://github.com/payshares/payshares-core/blob/master/src/xdr/Payshares-ledger-entries.x).
 
 ## Account entry
-This entry represents an [account](./accounts.md). In Stellar, everything is built around accounts: transactions are performed by accounts, and accounts control the access rights to balances.
+This entry represents an [account](./accounts.md). In Payshares, everything is built around accounts: transactions are performed by accounts, and accounts control the access rights to balances.
 
 Other entries are add-ons, owned by a main account entry. With every new entry
-attached to the account, the minimum balance in XLM goes up for the
+attached to the account, the minimum balance in XPS goes up for the
 account. For details, see [fees and minimum balance](./fees.md#minimum-account-balance).
 
 ## Trustline entry
@@ -80,7 +80,7 @@ account. For details, see [fees and minimum balance](./fees.md#minimum-account-b
 Trustline entries define the rules around the use of this currency. Rules can be defined by the user--e.g., setting a balance limit to limit risk--or by the issuer--e.g., an authorized flag.
 
 ## Offer entry
-Offers are entries that an account creates in the orderbook. They are a way to automate simple trading inside the Stellar network. For more on offers, refer to the [distributed exchange documentation](exchange.md).
+Offers are entries that an account creates in the orderbook. They are a way to automate simple trading inside the Payshares network. For more on offers, refer to the [distributed exchange documentation](exchange.md).
 
 ## Data entry
 Data entries are key value pairs attached to an account. They allow account controllers to attach arbitrary data to their account. It provides a flexible extension point to add application specific data into the ledger.

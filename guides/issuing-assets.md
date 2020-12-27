@@ -2,26 +2,26 @@
 title: Issuing Assets
 ---
 
-One of Stellar’s most powerful features is the ability to trade any kind of asset, US dollars, Nigerian naira, bitcoins, special coupons, [ICO tokens](https://www.stellar.org/blog/tokens-on-stellar/) or just about anything you like.
+One of Payshares’s most powerful features is the ability to trade any kind of asset, US dollars, Nigerian naira, bitcoins, special coupons, [ICO tokens](https://www.payshares.org/blog/tokens-on-payshares/) or just about anything you like.
 
-This works in Stellar because an asset is really just a credit from a particular account. When you trade US dollars on the Stellar network, you don’t actually trade US dollars—you trade US dollars *credited from a particular account.* Often, that account will be a bank, but if your neighbor had a banana plant, they might issue banana assets that you could trade with other people.
+This works in Payshares because an asset is really just a credit from a particular account. When you trade US dollars on the Payshares network, you don’t actually trade US dollars—you trade US dollars *credited from a particular account.* Often, that account will be a bank, but if your neighbor had a banana plant, they might issue banana assets that you could trade with other people.
 
-Every asset type (except lumens) is defined by two properties:
+Every asset type (except stakks) is defined by two properties:
 
 - `asset_code`: a short identifier of 1–12 letters or numbers, such as `USD`, or `EUR`. It can be anything you like, even `AstroDollars`.
 - `asset_issuer`: the ID of the account that issues the asset.
 
-In the Stellar SDK, assets are represented with the `Asset` class:
+In the Payshares SDK, assets are represented with the `Asset` class:
 
 <code-example name="Representing Assets">
 
 ```js
-var astroDollar = new StellarSdk.Asset(
+var astroDollar = new PaysharesSdk.Asset(
   'AstroDollar', 'GC2BKLYOOYPDEFJKLKY6FNNRQMGFLVHJKQRGNSSRRGSMPGF32LHCQVGF');
 ```
 
 ```java
-KeyPair issuer = StellarSdk.Keypair.fromAccountId(
+KeyPair issuer = PaysharesSdk.Keypair.fromAccountId(
   "GC2BKLYOOYPDEFJKLKY6FNNRQMGFLVHJKQRGNSSRRGSMPGF32LHCQVGF");
 Asset astroDollar = Asset.createNonNativeAsset("AstroDollar", issuer);
 ```
@@ -32,7 +32,7 @@ Asset astroDollar = Asset.createNonNativeAsset("AstroDollar", issuer);
   "asset_code": "AstroDollar",
   "asset_issuer": "GC2BKLYOOYPDEFJKLKY6FNNRQMGFLVHJKQRGNSSRRGSMPGF32LHCQVGF",
   // `asset_type` is used to determine how asset data is stored.
-  // It can be `native` (lumens), `credit_alphanum4`, or `credit_alphanum12`.
+  // It can be `native` (stakks), `credit_alphanum4`, or `credit_alphanum12`.
   "asset_type": "credit_alphanum12"
 }
 ```
@@ -44,39 +44,39 @@ Asset astroDollar = Asset.createNonNativeAsset("AstroDollar", issuer);
 
 To issue a new type of asset, all you need to do is choose a code. It can be any combination of up to 12 letters or numbers, but you should use the appropriate [ISO 4217 code][ISO 4217] (e.g. `USD` for US dollars)  or [ISIN] for national currencies or securities. Once you’ve chosen a code, you can begin paying people using that asset code. You don’t need to do anything to declare your asset on the network.
 
-However, other people can’t receive your asset until they’ve chosen to trust it. Because a Stellar asset is really a credit, you should trust that the issuer can redeem that credit if necessary later on. You might not want to trust your neighbor to issue banana assets if they don’t even have a banana plant, for example.
+However, other people can’t receive your asset until they’ve chosen to trust it. Because a Payshares asset is really a credit, you should trust that the issuer can redeem that credit if necessary later on. You might not want to trust your neighbor to issue banana assets if they don’t even have a banana plant, for example.
 
-An account can create a *trustline,* or a declaration that it trusts a particular asset, using the [change trust operation](concepts/list-of-operations.md#change-trust). A trustline can also be limited to a particular amount. If your banana-growing neighbor only has a few plants, you might not want to trust them for more than about 200 bananas. *Note: each trustline increases an account’s minimum balance by 10 lumens (the base reserve). For more details, see the [fees guide](concepts/fees.html#minimum-balance).*
+An account can create a *trustline,* or a declaration that it trusts a particular asset, using the [change trust operation](concepts/list-of-operations.md#change-trust). A trustline can also be limited to a particular amount. If your banana-growing neighbor only has a few plants, you might not want to trust them for more than about 200 bananas. *Note: each trustline increases an account’s minimum balance by 10 stakks (the base reserve). For more details, see the [fees guide](concepts/fees.html#minimum-balance).*
 
 Once you’ve chosen an asset code and someone else has created a trustline for your asset, you’re free to start making payment operations to them using your asset. If someone you want to pay doesn’t trust your asset, you might also be able to use the [distributed exchange](concepts/exchange.md).
 
 ### Try it Out
 
-Sending and receiving custom assets is very similar to [sending and receiving lumens](get-started/transactions.md#building-a-transaction). Here’s a simple example:
+Sending and receiving custom assets is very similar to [sending and receiving stakks](get-started/transactions.md#building-a-transaction). Here’s a simple example:
 
 <code-example name="Send Custom Assets">
 
 ```js
-var StellarSdk = require('stellar-sdk');
-StellarSdk.Network.useTestNetwork();
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var PaysharesSdk = require('payshares-sdk');
+PaysharesSdk.Network.useTestNetwork();
+var server = new PaysharesSdk.Server('https://horizon-testnet.payshares.org');
 
 // Keys for accounts to issue and receive the new asset
-var issuingKeys = StellarSdk.Keypair
+var issuingKeys = PaysharesSdk.Keypair
   .fromSecret('SCZANGBA5YHTNYVVV4C3U252E2B6P6F5T3U6MM63WBSBZATAQI3EBTQ4');
-var receivingKeys = StellarSdk.Keypair
+var receivingKeys = PaysharesSdk.Keypair
   .fromSecret('SDSAVCRE5JRAI7UFAVLE5IMIZRD6N6WOJUWKY4GFN34LOBEEUS4W2T2D');
 
 // Create an object to represent the new asset
-var astroDollar = new StellarSdk.Asset('AstroDollar', issuingKeys.publicKey());
+var astroDollar = new PaysharesSdk.Asset('AstroDollar', issuingKeys.publicKey());
 
 // First, the receiving account must trust the asset
 server.loadAccount(receivingKeys.publicKey())
   .then(function(receiver) {
-    var transaction = new StellarSdk.TransactionBuilder(receiver)
+    var transaction = new PaysharesSdk.TransactionBuilder(receiver)
       // The `changeTrust` operation creates (or alters) a trustline
       // The `limit` parameter below is optional
-      .addOperation(StellarSdk.Operation.changeTrust({
+      .addOperation(PaysharesSdk.Operation.changeTrust({
         asset: astroDollar,
         limit: '1000'
       }))
@@ -90,8 +90,8 @@ server.loadAccount(receivingKeys.publicKey())
     return server.loadAccount(issuingKeys.publicKey())
   })
   .then(function(issuer) {
-    var transaction = new StellarSdk.TransactionBuilder(issuer)
-      .addOperation(StellarSdk.Operation.payment({
+    var transaction = new PaysharesSdk.TransactionBuilder(issuer)
+      .addOperation(PaysharesSdk.Operation.payment({
         destination: receivingKeys.publicKey(),
         asset: astroDollar,
         amount: '10'
@@ -107,7 +107,7 @@ server.loadAccount(receivingKeys.publicKey())
 
 ```java
 Network.useTestNetwork();
-Server server = new Server("https://horizon-testnet.stellar.org");
+Server server = new Server("https://horizon-testnet.payshares.org");
 
 // Keys for accounts to issue and receive the new asset
 KeyPair issuingKeys = KeyPair
@@ -144,9 +144,9 @@ server.submitTransaction(sendAstroDollars);
 ## Discoverablity and Meta information
 
 Another thing that is important when you issue an asset is to provide clear information about what your asset represents. This info can be discovered and displayed by clients so users know exactly what they are getting when they hold your asset. 
-To do this you must do two simple things. First, add a section in your [stellar.toml file](concepts/stellar-toml.html) that contains the necessary meta fields:
+To do this you must do two simple things. First, add a section in your [payshares.toml file](concepts/payshares-toml.html) that contains the necessary meta fields:
 ```
-# stellar.toml example asset
+# payshares.toml example asset
 [[CURRENCIES]]
 code="GOAT"
 issuer="GD5T6IPRNCKFOHQWT264YPKOZAWUMMZOLZBJ6BNQMUGPWGRLBK3U7ZNP"
@@ -157,23 +157,23 @@ conditions="There will only ever be 10,000 GOAT tokens in existence. We will dis
 image="https://pbs.twimg.com/profile_images/666921221410439168/iriHah4f.jpg"
 ```
 
-Second, use the [set options operation](https://www.stellar.org/developers/guides/concepts/list-of-operations.html#set-options) to set the `home_domain` of your issuing account to the domain where the above stellar.toml file is hosted. The following code sets the home domain:
+Second, use the [set options operation](https://www.payshares.org/developers/guides/concepts/list-of-operations.html#set-options) to set the `home_domain` of your issuing account to the domain where the above payshares.toml file is hosted. The following code sets the home domain:
 
 <code-example name="Set Home Domain">
 
 ```js
-var StellarSdk = require('stellar-sdk');
-StellarSdk.Network.useTestNetwork();
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+var PaysharesSdk = require('payshares-sdk');
+PaysharesSdk.Network.useTestNetwork();
+var server = new PaysharesSdk.Server('https://horizon-testnet.payshares.org');
 
 // Keys for issuing account
-var issuingKeys = StellarSdk.Keypair
+var issuingKeys = PaysharesSdk.Keypair
   .fromSecret('SCZANGBA5YHTNYVVV4C3U252E2B6P6F5T3U6MM63WBSBZATAQI3EBTQ4');
 
 server.loadAccount(issuingKeys.publicKey())
   .then(function(issuer) {
-    var transaction = new StellarSdk.TransactionBuilder(issuer)
-      .addOperation(StellarSdk.Operation.setOptions({
+    var transaction = new PaysharesSdk.TransactionBuilder(issuer)
+      .addOperation(PaysharesSdk.Operation.setOptions({
         homeDomain: 'yourdomain.com',
       }))
       .build();
@@ -187,7 +187,7 @@ server.loadAccount(issuingKeys.publicKey())
 
 ```java
 Network.useTestNetwork();
-Server server = new Server("https://horizon-testnet.stellar.org");
+Server server = new Server("https://horizon-testnet.payshares.org");
 
 // Keys for issuing account
 KeyPair issuingKeys = KeyPair
@@ -211,13 +211,13 @@ Once you begin issuing your own assets, there are a few smart practices you can 
 
 ### Specialized Issuing Accounts
 
-In the simplest situations, you can issue assets from your everyday Stellar account. However, if you operate a financial institution or a business, you should keep a separate account specifically for issuing assets. Why?
+In the simplest situations, you can issue assets from your everyday Payshares account. However, if you operate a financial institution or a business, you should keep a separate account specifically for issuing assets. Why?
 
 - Easier tracking: because an asset represents a credit, it disappears when it is sent back to the account that issued it. To better track and control the amount of your asset in circulation, pay a fixed amount of the asset from the issuing account to the working account that you use for normal transactions.
 
-  The issuing account can issue the asset when more of the underlying value (like actual bananas or dollar bills) is on hand and the accounts involved in public transactions never have to worry about how much is available outside Stellar.
+  The issuing account can issue the asset when more of the underlying value (like actual bananas or dollar bills) is on hand and the accounts involved in public transactions never have to worry about how much is available outside Payshares.
 
-- Keeping trust simple: as your usage of Stellar grows, you might consider having multiple accounts for a variety of reasons, such as making transactions at high rates. Keeping a canonical issuing account makes it easier for others to know which account to trust.
+- Keeping trust simple: as your usage of Payshares grows, you might consider having multiple accounts for a variety of reasons, such as making transactions at high rates. Keeping a canonical issuing account makes it easier for others to know which account to trust.
 
 
 ### Requiring or Revoking Authorization
@@ -231,11 +231,11 @@ The following example sets authorization to be both required and revocable:
 <code-example name="Asset Authorization">
 
 ```js
-StellarSdk.Network.useTestNetwork();
-var flags = StellarSdk.xdr.AccountFlags;
-var transaction = new StellarSdk.TransactionBuilder(issuingAccount)
-  .addOperation(StellarSdk.Operation.setOptions({
-    setFlags: StellarSdk.AuthRevocableFlag | StellarSdk.AuthRequiredFlag
+PaysharesSdk.Network.useTestNetwork();
+var flags = PaysharesSdk.xdr.AccountFlags;
+var transaction = new PaysharesSdk.TransactionBuilder(issuingAccount)
+  .addOperation(PaysharesSdk.Operation.setOptions({
+    setFlags: PaysharesSdk.AuthRevocableFlag | PaysharesSdk.AuthRequiredFlag
   }))
   .build();
 transaction.sign(issuingKeys);
@@ -243,10 +243,10 @@ server.submitTransaction(transaction);
 ```
 
 ```java
-import org.stellar.sdk.AccountFlag;
+import org.payshares.sdk.AccountFlag;
 
 Network.useTestNetwork();
-Server server = new Server("https://horizon-testnet.stellar.org");
+Server server = new Server("https://horizon-testnet.payshares.org");
 
 // Keys for issuing account
 KeyPair issuingKeys = KeyPair

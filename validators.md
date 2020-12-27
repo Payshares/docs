@@ -1,15 +1,15 @@
-Stellar.org doesn't currently run a validator. We do run a couple nodes recording and saving network history.
+Payshares.org doesn't currently run a validator. We do run a couple nodes recording and saving network history.
 
 If you would like to run a validator please:
- - Read the [admin guide](https://www.stellar.org/developers/stellar-core/learn/admin.html).
- - Join the #validators channel on [our slack](http://slack.stellar.org).
- - See the [example config](./other/stellar-core-validator-example.cfg) for setting up your validator.
+ - Read the [admin guide](https://www.payshares.org/developers/payshares-core/learn/admin.html).
+ - Join the #validators channel on [our slack](http://slack.payshares.org).
+ - See the [example config](./other/payshares-core-validator-example.cfg) for setting up your validator.
  - Start your node.
  - Open a pull request to list it here.
 
-For general validator support, please check out [the stellar-public #validator channel.](https://stellar-public.slack.com/messages/C0AJ5765T)
+For general validator support, please check out [the payshares-public #validator channel.](https://payshares-public.slack.com/messages/C0AJ5765T)
 
-## None of the following validators are recommended by Stellar Development Foundation.
+## None of the following validators are recommended by Payshares Development Foundation.
 
 We don't know who really controls these nodes. They could all be owned by the same person! This list is purely for informational purposes.
 
@@ -19,7 +19,7 @@ Name | FairX
 Description | https://fairx.io
 Contact | Michael Dowling - about@fairx.io (email)
 NodeID | GAXEJOMEVVD5OAAGOOZ4SXTTNR46C4V23XROHWRNVEGOTGOABO3ZVH7Z
-Peer |  uswest.stellar.fairx.io
+Peer |  uswest.payshares.fairx.io
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 ------
@@ -28,7 +28,7 @@ Name | IBM
 Description | https://ibm.com/blockchain
 Contact | jesse.lund@ibm.com
 NodeID | GCKWUQGSVO45ZV3QK7POYL7HMFWDKWJVMFVEGUJKCAEVUITUCTQWFSM6 GBUJA3Z5TLAKLI5MEH4TETLXJBQVSVW74MNEKP5UUHTP3IMLNSUPOTVA GB2HF2NHRKKFZYFDGD7MUENOYROOEK7SWYV2APYOODP6P7BUJTLILKIL GDRA72H7JWXAXWJKOONQOPH3JKNSH5MQ6BO5K74C3X6FO2G3OG464BPU GAEEH4TBR7YQQWKJ2FIT57HXZZTMK2BX5LY4POJUYFSEZ7Y2ONHPPTES GBJ7T3BTLX2BP3T5Q4256PUF7JMDAB35LLO32QRDYE67TDDMN7H33GGE GCH3O5PTCZVR4G65W3B4XDKWI5V677HQB3QO7CW4YPVYDDFBE2GE7G6V GAENPO2XRTTMAJXDWM3E3GAALNLG4HVMKJ4QF525TR25RI42YPEDULOW
-Peer |  au.stellar.ibm.com	(Sydney,	Australia) <br/> br.stellar.ibm.com	(Sao Paulo,	Brazil) <br/> ca.stellar.ibm.com	(Toronto,	Canada) <br/> no.stellar.ibm.com (Oslo,	Norway) <br/> it.stellar.ibm.com	(Milan	,	Italy) <br/> hk.stellar.ibm.com	(Hong Kong,	Hong Kong) <br/> in.stellar.ibm.com	(Chennai,	India) <br/> uk.stellar.ibm.com	(London	,	England)<br/>
+Peer |  au.payshares.ibm.com	(Sydney,	Australia) <br/> br.payshares.ibm.com	(Sao Paulo,	Brazil) <br/> ca.payshares.ibm.com	(Toronto,	Canada) <br/> no.payshares.ibm.com (Oslo,	Norway) <br/> it.payshares.ibm.com	(Milan	,	Italy) <br/> hk.payshares.ibm.com	(Hong Kong,	Hong Kong) <br/> in.payshares.ibm.com	(Chennai,	India) <br/> uk.payshares.ibm.com	(London	,	England)<br/>
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 ------
@@ -42,10 +42,10 @@ Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 Name | eno
 -----|--------
-Description | lumens to watts
+Description | stakks to watts
 Contact | appweb.cn@gmail.com (email)
 NodeID | GAOO3LWBC4XF6VWRP5ESJ6IBHAISVJMSBTALHOQM2EZG7Q477UWA6L7U
-Peer |  stellar.256kw.com
+Peer |  payshares.256kw.com
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 Name | tempo france
@@ -53,16 +53,16 @@ Name | tempo france
 Description | tempo.eu.com
 Contact | ant (slack)
 NodeID | GCJCSMSPIWKKPR7WEPIQG63PDF7JGGEENRC33OKVBSPUDIRL6ZZ5M7OO
-Peer | stellar1.tempo.eu.com
+Peer | payshares1.tempo.eu.com
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 Name | satoshipay
 -----|--------
 Description | https://satoshipay.io/
 Contact | andrenarchy (slack)
-Node 1 | GC5SXLNAM3C4NMGK2PXK4R34B5GNZ47FYQ24ZIBFDFOCU6D4KBN4POAE<br/>(peer stellar1.satoshipay.io)
-Node 2 | GBJQUIXUO4XSNPAUT6ODLZUJRV2NPXYASKUBY4G5MYP3M47PCVI55MNT<br/>(peer stellar2.satoshipay.io)
-Node 3 | GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY<br/>(peer stellar3.satoshipay.io)
+Node 1 | GC5SXLNAM3C4NMGK2PXK4R34B5GNZ47FYQ24ZIBFDFOCU6D4KBN4POAE<br/>(peer payshares1.satoshipay.io)
+Node 2 | GBJQUIXUO4XSNPAUT6ODLZUJRV2NPXYASKUBY4G5MYP3M47PCVI55MNT<br/>(peer payshares2.satoshipay.io)
+Node 3 | GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY<br/>(peer payshares3.satoshipay.io)
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 Name | ICICI Bank
@@ -84,7 +84,7 @@ Name | Exodo Fin Tech
 Description | run by the team at crservers.com
 Contact | rodrigo (slack) webmaster@crservers.com (email)
 NodeID | GA4UZHDP44Q6NGZ6YXA7FMTFYPZIN3XLCUMMY2KUH5FX6TGEE4SEM42K
-Peer | stellar.crservers.com
+Peer | payshares.crservers.com
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 Name | umbrel
@@ -96,7 +96,7 @@ Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 Name | ZuluCrypto
 -----|--------
-Description | stellar-core.zulucrypto.com
+Description | payshares-core.zulucrypto.com
 Contact | zulucrypto (slack) zulucrypto@protonmail.com
 NodeID | GCYRJSP52KIUOMXPW5XHOQ77SPQC3O55KVK6KSJO4ABPMG6X3ZOU5UU2
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
@@ -118,7 +118,7 @@ Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
 
 Name | Mcna
 -----|--------
-Description | A Lumen holder
+Description | A Stakk holder
 Contact | chris.mcna@gmail.com (email)
 NodeID | GD63J64WLRF3IOLJZODAVLB4PQNMFFLDBIZCRC4GLTLCUE4ZQMIKPJK6
 Status | ![Online](https://img.shields.io/badge/status-online-brightgreen.svg)
@@ -135,7 +135,7 @@ Status | ![Offline](https://img.shields.io/badge/status-offline-red.svg)
 
 Name | snt.lux
 -----|--------
-Description | university of luxembourg stellar node
+Description | university of luxembourg payshares node
 Contact | http://wwwen.uni.lu/snt/research/sedan
 NodeID | GCDLFPQ76D6YUSCUECLKI3AFEVXFWVRY2RZH2YQNYII35FDECWUGV24T
 Status | ![Offline](https://img.shields.io/badge/status-offline-red.svg)
@@ -152,7 +152,7 @@ Name | moni
 Description | moni.com
 Contact | sirius (slack)
 NodeID | GAXP5DW4CVCW2BJNPFGTWCEGZTJKTNWFQQBE5SCWNJIJ54BOHR3WQC3W
-Peer | stellar1.moni.com
+Peer | payshares1.moni.com
 Status | ![Offline](https://img.shields.io/badge/status-offline-red.svg)
 
 Name | strllar 
@@ -174,10 +174,10 @@ Status | ![Offline](https://img.shields.io/badge/status-offline-red.svg)
 
 Name | quantoz.com
 -----|--------
-Description | quantoz technology stellar aws node
+Description | quantoz technology payshares aws node
 Contact | mvaneijk (slack) raymens (slack)
 NodeID | GAL4GIVM6E2PQUUXIMNUXJQB6PC2PPZPR5JKELOBK2MXBBIFMU25YOSD
-Peer | stellar-node-1.quantoz.com
+Peer | payshares-node-1.quantoz.com
 Status | ![Offline](https://img.shields.io/badge/status-offline-red.svg)
 
 Name | ptarasov
@@ -192,7 +192,7 @@ Name | w00kie
 Description | running on a small droplet, for science!
 Contact | frejete (slack) francois@rejete.com (email)
 NodeID | GDJ73EX25GGUVMUBCK6DPSTJLYP3IC7I3H2URLXJQ5YP56BW756OUHIG
-Peer | stellar.w00kie.com
+Peer | payshares.w00kie.com
 Status | ![Offline](https://img.shields.io/badge/status-offline-red.svg)
 
 Name | donovan

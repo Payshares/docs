@@ -51,11 +51,11 @@ Once a transaction passes this first validity check, it is propagated to the net
 
 For each operation, there is a matching result type. In the case of success, this result allows users to gather information about the effects of the operation. In the case of failure, it allows users to learn more about the error.
 
-Stellar Core queues results in the txhistory table for other components to derive data from. This txhistory table is used by the history module in Stellar Core for uploading the history into long-term storage. It can also be used by external processes such as Horizon to gather the network history they need.
+Payshares Core queues results in the txhistory table for other components to derive data from. This txhistory table is used by the history module in Payshares Core for uploading the history into long-term storage. It can also be used by external processes such as Horizon to gather the network history they need.
 
 ## Transactions involving multiple accounts
 
-Typically transactions only involve operations on a single account. For example, if account A wanted to send lumens to account B, only account A needs to authorize the transaction.
+Typically transactions only involve operations on a single account. For example, if account A wanted to send stakks to account B, only account A needs to authorize the transaction.
 
 It's possible, however, to compose a transaction that includes operations on multiple accounts. In this case, to authorize the operations, the transaction envelope must include signatures of every account in question. For example, you can make a transaction where accounts A and B both send to account C. This transaction would need authorization from both account A and B before it's submitted to the network.
 
@@ -63,13 +63,13 @@ It's possible, however, to compose a transaction that includes operations on mul
 ## Examples
 ### 1. Exchange without third party
 
-  Anush wants to send Bridget some XLM (Operation 1) in exchange for BTC (Operation 2).
+  Anush wants to send Bridget some XPS (Operation 1) in exchange for BTC (Operation 2).
 
   A transaction is constructed:
   * source = `Anush_account`
   * Operation 1
     * source = _null_
-    * Payment send XLM --> `Bridget_account`
+    * Payment send XPS --> `Bridget_account`
   * Operation 2
     * source = _`Bridget_account`
     * Payment send BTC --> `Anush_account`
@@ -105,14 +105,14 @@ Other, more complex ways of submitting this transaction are possible, but signin
 
 Transactions that require multiple parties to sign, such as the exchange transaction between Anush and Bridget from example #1, can take an arbitrarily long time. Because all transactions are constructed with specific sequence numbers, waiting on the signatures can block Anush's account. To avoid this situation, a scheme similar to Example #2 can be used.
 
-  Anush would create a temporary account `Anush_temp`, fund `Anush_temp` with XLM, and add the `Anush_account` public key as signer to `Anush_temp` with a weight crossing at least the low threshold.
+  Anush would create a temporary account `Anush_temp`, fund `Anush_temp` with XPS, and add the `Anush_account` public key as signer to `Anush_temp` with a weight crossing at least the low threshold.
 
   A transaction is then constructed:
   * source=_Anush_temp_
   * sequence number=_Anush_temp seq num_
   * Operation 1
     * source=_Anush_account_
-    * Payment send XLM -> Bridget_account
+    * Payment send XPS -> Bridget_account
   * Operation 2
     * source=_Bridget_account_
     * Payment send BTC -> Anush_account
@@ -120,7 +120,7 @@ Transactions that require multiple parties to sign, such as the exchange transac
   The transaction would have to be signed by both Anush_account and Bridget_account, but the sequence
   number consumed will be from account Anush_temp.
 
-  If `Anush_account` wants to recover the XLM balance from `Anush_temp`, an additional operation "Operation 3" can be included in the transaction. If you want to do this, `Anush_temp` must add `Anush_account` as a signer with a weight that crosses the high threshold:
+  If `Anush_account` wants to recover the XPS balance from `Anush_temp`, an additional operation "Operation 3" can be included in the transaction. If you want to do this, `Anush_temp` must add `Anush_account` as a signer with a weight that crosses the high threshold:
   * Operation 3
     * source=_null_
     * Account Merge -> "Anush_account"

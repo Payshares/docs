@@ -1,24 +1,24 @@
 ---
-title: Stellar Tools
+title: Payshares Tools
 ---
 # Tools
 
-## [Laboratory](https://www.stellar.org/laboratory)
-Interactive way to learn the Stellar API. The source is available [here](https://github.com/stellar/laboratory).
+## [Laboratory](https://www.payshares.org/laboratory)
+Interactive way to learn the Payshares API. The source is available [here](https://github.com/payshares/laboratory).
 
-## [Compliance protocol testing app](https://gostellar.org)
-Interactive tool to test [compliance protocol](https://www.stellar.org/developers/guides/compliance-protocol.html) deployment.
+## [Compliance protocol testing app](https://gopayshares.org)
+Interactive tool to test [compliance protocol](https://www.payshares.org/developers/guides/compliance-protocol.html) deployment.
 
 # Reference applications and sample code
 
-## [Account Viewer](https://www.stellar.org/account-viewer)
-Check your balance and send simple payments. This basic client is built on top of [Interstellar](https://github.com/stellar/interstellar) and connects to the live Stellar network. The source is available [here](https://github.com/stellar/account-viewer).
+## [Account Viewer](https://www.payshares.org/account-viewer)
+Check your balance and send simple payments. This basic client is built on top of [Interpayshares](https://github.com/payshares/interpayshares) and connects to the live Payshares network. The source is available [here](https://github.com/payshares/account-viewer).
 
-## [Dashboard](http://dashboard.stellar.org)
-Current status of the live and test networks. The source is available [here](https://github.com/stellar/dashboard).
+## [Dashboard](http://dashboard.payshares.org)
+Current status of the live and test networks. The source is available [here](https://github.com/payshares/dashboard).
 
-## [SMS Client](https://github.com/stellar/stellar-sms-client)
-This is a demo of Stellar SMS Client. It was originally developed during Stellar Hack Day.
+## [SMS Client](https://github.com/payshares/payshares-sms-client)
+This is a demo of Payshares SMS Client. It was originally developed during Payshares Hack Day.
 
 # Tools and Applications created by the community
-A list is maintained on [Galactic Talk](https://galactictalk.org/d/14-projects-built-on-stellar). Scroll down for tools that are useful for developers.
+A list is maintained on [Galactic Talk](https://galactictalk.org/d/14-projects-built-on-payshares). Scroll down for tools that are useful for developers.

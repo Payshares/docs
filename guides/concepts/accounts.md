@@ -2,7 +2,7 @@
 title: Accounts
 ---
 
-Accounts are the central data structure in Stellar. Accounts are identified by a public key and saved in the ledger.
+Accounts are the central data structure in Payshares. Accounts are identified by a public key and saved in the ledger.
 Everything else in the ledger, such as offers or [trustlines](./assets.md#trustlines), are owned by a particular account.
 
 Accounts are created with the [Create Account](./list-of-operations.md#create-account) operation.
@@ -20,7 +20,7 @@ Accounts have the following fields:
 > The public key that was first used to create the account. You can replace the key used for signing the account's transactions with a different public key, but the original account ID will always be used to identify the account.
 >
 > #### Balance
-> The number of lumens held by the account. The balance is denominated in 1/10,000,000th of a lumen, the smallest divisible unit of a lumen.
+> The number of stakks held by the account. The balance is denominated in 1/10,000,000th of a stakk, the smallest divisible unit of a stakk.
 >
 > #### Sequence number
 > The current transaction sequence number of the account. This number starts equal to the ledger number at which the account was created.
@@ -39,9 +39,9 @@ Accounts have the following fields:
 >   - **Authorization immutable (0x4)**: If this is set then none of the authorization flags can be set and the account can never be deleted.
 >
 > #### Home domain
-> A domain name that can optionally be added to the account. Clients can look up a [stellar.toml](./stellar-toml.md) from this domain. This should be in the format of a [fully qualified domain name](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) such as `example.com`.
+> A domain name that can optionally be added to the account. Clients can look up a [payshares.toml](./payshares-toml.md) from this domain. This should be in the format of a [fully qualified domain name](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) such as `example.com`.
 >
-> The federation protocol can use the home domain to look up more details about a transaction's memo or [address](https://www.stellar.org/developers/learn/concepts/federation.html#stellar-addresses) details about an account. For more on federation, see the [federation guide](./federation.md).
+> The federation protocol can use the home domain to look up more details about a transaction's memo or [address](https://www.payshares.org/developers/learn/concepts/federation.html#payshares-addresses) details about an account. For more on federation, see the [federation guide](./federation.md).
 >
 >
 > #### Thresholds

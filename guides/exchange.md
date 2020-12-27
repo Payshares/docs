@@ -2,53 +2,53 @@
 title: Set Up an Exchange
 ---
 
-# Adding Stellar to your Exchange
-This guide will walk you through the integration steps to add Stellar to your exchange. This example uses Node.js and the [JS Stellar SDK](https://github.com/stellar/js-stellar-sdk), but it should be easy to adapt to other languages.
+# Adding Payshares to your Exchange
+This guide will walk you through the integration steps to add Payshares to your exchange. This example uses Node.js and the [JS Payshares SDK](https://github.com/payshares/js-payshares-sdk), but it should be easy to adapt to other languages.
 
 There are many ways to architect an exchange. This guide uses the following design:
- - `issuing account`: One Stellar account that holds the majority of customer deposits offline.
- - `base account`: One Stellar account that holds a small amount of customer deposits online and is used to payout to withdrawal requests.
+ - `issuing account`: One Payshares account that holds the majority of customer deposits offline.
+ - `base account`: One Payshares account that holds a small amount of customer deposits online and is used to payout to withdrawal requests.
  - `customerID`: Each user has a customerID, used to correlate incoming deposits with a particular user's account on the exchange.
 
-The two main integration points to Stellar for an exchange are:<br>
-1) Listening for deposit transactions from the Stellar network<br>
-2) Submitting withdrawal transactions to the Stellar network
+The two main integration points to Payshares for an exchange are:<br>
+1) Listening for deposit transactions from the Payshares network<br>
+2) Submitting withdrawal transactions to the Payshares network
 
 ## Setup
 
 ### Operational
-* *(optional)* Set up [Stellar Core](https://www.stellar.org/developers/stellar-core/software/admin.html)
-* *(optional)* Set up [Horizon](https://www.stellar.org/developers/horizon/reference/index.html)
+* *(optional)* Set up [Payshares Core](https://www.payshares.org/developers/payshares-core/software/admin.html)
+* *(optional)* Set up [Horizon](https://www.payshares.org/developers/horizon/reference/index.html)
 
-If your exchange doesn't see a lot of volume, you don't need to set up your own instances of Stellar Core and Horizon. Instead, use one of the Stellar.org public-facing Horizon servers.
+If your exchange doesn't see a lot of volume, you don't need to set up your own instances of Payshares Core and Horizon. Instead, use one of the Payshares.org public-facing Horizon servers.
 ```
-  test net: {hostname:'horizon-testnet.stellar.org', secure:true, port:443};
-  live: {hostname:'horizon.stellar.org', secure:true, port:443};
+  test net: {hostname:'horizon-testnet.payshares.org', secure:true, port:443};
+  live: {hostname:'horizon.payshares.org', secure:true, port:443};
 ```
 
 ### Issuing account
-An issuing account is typically used to keep the bulk of customer funds secure. An issuing account is a Stellar account whose secret keys are not on any device that touches the Internet. Transactions are manually initiated by a human and signed locally on the offline machine—a local install of `js-stellar-sdk` creates a `tx_blob` containing the signed transaction. This `tx_blob` can be transported to a machine connected to the Internet via offline methods (e.g., USB or by hand). This design makes the issuing account secret key much harder to compromise.
+An issuing account is typically used to keep the bulk of customer funds secure. An issuing account is a Payshares account whose secret keys are not on any device that touches the Internet. Transactions are manually initiated by a human and signed locally on the offline machine—a local install of `js-payshares-sdk` creates a `tx_blob` containing the signed transaction. This `tx_blob` can be transported to a machine connected to the Internet via offline methods (e.g., USB or by hand). This design makes the issuing account secret key much harder to compromise.
 
 ### Base account
-A base account contains a more limited amount of funds than an issuing account. A base account is a Stellar account used on a machine that is connected to the Internet. It handles the day-to-day sending and receiving of lumens. The limited amount of funds in a base account restricts loss in the event of a security breach.
+A base account contains a more limited amount of funds than an issuing account. A base account is a Payshares account used on a machine that is connected to the Internet. It handles the day-to-day sending and receiving of stakks. The limited amount of funds in a base account restricts loss in the event of a security breach.
 
 ### Database
-- Need to create a table for pending withdrawals, `StellarTransactions`.
-- Need to create a table to hold the latest cursor position of the deposit stream, `StellarCursor`.
+- Need to create a table for pending withdrawals, `PaysharesTransactions`.
+- Need to create a table to hold the latest cursor position of the deposit stream, `PaysharesCursor`.
 - Need to add a row to your users table that creates a unique `customerID` for each user.
 - Need to populate the customerID row.
 
 ```
-CREATE TABLE StellarTransactions (UserID INT, Destination varchar(56), XLMAmount INT, state varchar(8));
-CREATE TABLE StellarCursor (id INT, cursor varchar(50)); // id - AUTO_INCREMENT field
+CREATE TABLE PaysharesTransactions (UserID INT, Destination varchar(56), XPSAmount INT, state varchar(8));
+CREATE TABLE PaysharesCursor (id INT, cursor varchar(50)); // id - AUTO_INCREMENT field
 ```
 
-Possible values for `StellarTransactions.state` are "pending", "done", "error".
+Possible values for `PaysharesTransactions.state` are "pending", "done", "error".
 
 
 ### Code
 
-Here is a code framework you can use to integrate Stellar into your exchange. The following sections describe each step.
+Here is a code framework you can use to integrate Payshares into your exchange. The following sections describe each step.
 
 For this guide, we use placeholder functions for reading/writing to the exchange database. Each database library connects differently, so we abstract away those details.
 
@@ -58,24 +58,24 @@ var config = {};
 config.baseAccount = "your base account address";
 config.baseAccountSecret = "your base account secret key";
 
-// You can use Stellar.org's instance of Horizon or your own
-config.horizon = 'https://horizon-testnet.stellar.org';
+// You can use Payshares.org's instance of Horizon or your own
+config.horizon = 'https://horizon-testnet.payshares.org';
 
-// Include the JS Stellar SDK
+// Include the JS Payshares SDK
 // It provides a client-side interface to Horizon
-var StellarSdk = require('stellar-sdk');
+var PaysharesSdk = require('payshares-sdk');
 // uncomment for live network:
-// StellarSdk.Network.usePublicNetwork();
+// PaysharesSdk.Network.usePublicNetwork();
 
-// Initialize the Stellar SDK with the Horizon instance
+// Initialize the Payshares SDK with the Horizon instance
 // You want to connect to
-var server = new StellarSdk.Server(config.horizon);
+var server = new PaysharesSdk.Server(config.horizon);
 
 // Get the latest cursor position
-var lastToken = latestFromDB("StellarCursor");
+var lastToken = latestFromDB("PaysharesCursor");
 
 // Listen for payments from where you last stopped
-// GET https://horizon-testnet.stellar.org/accounts/{config.baseAccount}/payments?cursor={last_token}
+// GET https://horizon-testnet.payshares.org/accounts/{config.baseAccount}/payments?cursor={last_token}
 let callBuilder = server.payments().forAccount(config.baseAccount);
 
 // If no cursor has been saved yet, don't add cursor parameter
@@ -86,7 +86,7 @@ if (lastToken) {
 callBuilder.stream({onmessage: handlePaymentResponse});
 
 // Load the account sequence number from Horizon and return the account
-// GET https://horizon-testnet.stellar.org/accounts/{config.baseAccount}
+// GET https://horizon-testnet.payshares.org/accounts/{config.baseAccount}
 server.loadAccount(config.baseAccount)
   .then(function (account) {
     submitPendingTransactions(account);
@@ -94,15 +94,15 @@ server.loadAccount(config.baseAccount)
 ```
 
 ## Listening for deposits
-When a user wants to deposit lumens in your exchange, instruct them to send XLM to your base account address with the customerID in the memo field of the transaction.
+When a user wants to deposit stakks in your exchange, instruct them to send XPS to your base account address with the customerID in the memo field of the transaction.
 
-You must listen for payments to the base account and credit any user that sends XLM there. Here's code that listens for these payments:
+You must listen for payments to the base account and credit any user that sends XPS there. Here's code that listens for these payments:
 
 ```js
 // Start listening for payments from where you last stopped
-var lastToken = latestFromDB("StellarCursor");
+var lastToken = latestFromDB("PaysharesCursor");
 
-// GET https://horizon-testnet.stellar.org/accounts/{config.baseAccount}/payments?cursor={last_token}
+// GET https://horizon-testnet.payshares.org/accounts/{config.baseAccount}/payments?cursor={last_token}
 let callBuilder = server.payments().forAccount(config.baseAccount);
 
 // If no cursor has been saved yet, don't add cursor parameter
@@ -116,15 +116,15 @@ callBuilder.stream({onmessage: handlePaymentResponse});
 
 For every payment received by the base account, you must:<br>
 -check the memo field to determine which user sent the deposit.<br>
--record the cursor in the `StellarCursor` table so you can resume payment processing where you left off.<br>
--credit the user's account in the DB with the number of XLM they sent to deposit.
+-record the cursor in the `PaysharesCursor` table so you can resume payment processing where you left off.<br>
+-credit the user's account in the DB with the number of XPS they sent to deposit.
 
 So, you pass this function as the `onmessage` option when you stream payments:
 
 ```js
 function handlePaymentResponse(record) {
 
-  // GET https://horizon-testnet.stellar.org/transaction/{id of transaction this payment is part of}
+  // GET https://horizon-testnet.payshares.org/transaction/{id of transaction this payment is part of}
   record.transaction()
     .then(function(txn) {
       var customer = txn.memo;
@@ -134,7 +134,7 @@ function handlePaymentResponse(record) {
         return;
       }
       if (record.asset_type != 'native') {
-         // If you are a XLM exchange and the customer sends
+         // If you are a XPS exchange and the customer sends
          // you a non-native asset, some options for handling it are
          // 1. Trade the asset to native and credit that amount
          // 2. Send it back to the customer  
@@ -144,9 +144,9 @@ function handlePaymentResponse(record) {
           // Update in an atomic transaction
           db.transaction(function() {
             // Store the amount the customer has paid you in your database
-            store([record.amount, customer], "StellarDeposits");
+            store([record.amount, customer], "PaysharesDeposits");
             // Store the cursor in your database
-            store(record.paging_token, "StellarCursor");
+            store(record.paging_token, "PaysharesCursor");
           });
         } else {
           // If customer cannot be found, you can raise an error,
@@ -164,83 +164,83 @@ function handlePaymentResponse(record) {
 
 
 ## Submitting withdrawals
-When a user requests a lumen withdrawal from your exchange, you must generate a Stellar transaction to send them the lumens. Here is additional documentation about [Building Transactions](https://www.stellar.org/developers/js-stellar-base/learn/building-transactions.html).
+When a user requests a stakk withdrawal from your exchange, you must generate a Payshares transaction to send them the stakks. Here is additional documentation about [Building Transactions](https://www.payshares.org/developers/js-payshares-base/learn/building-transactions.html).
 
-The function `handleRequestWithdrawal` will queue up a transaction in the exchange's `StellarTransactions` table whenever a withdrawal is requested.
+The function `handleRequestWithdrawal` will queue up a transaction in the exchange's `PaysharesTransactions` table whenever a withdrawal is requested.
 
 ```js
-function handleRequestWithdrawal(userID,amountLumens,destinationAddress) {
+function handleRequestWithdrawal(userID,amountStakks,destinationAddress) {
   // Update in an atomic transaction
   db.transaction(function() {
     // Read the user's balance from the exchange's database
     var userBalance = getBalance('userID');
 
-    // Check that user has the required lumens
-    if (amountLumens <= userBalance) {
-      // Debit the user's internal lumen balance by the amount of lumens they are withdrawing
-      store([userID, userBalance - amountLumens], "UserBalances");
-      // Save the transaction information in the StellarTransactions table
-      store([userID, destinationAddress, amountLumens, "pending"], "StellarTransactions");
+    // Check that user has the required stakks
+    if (amountStakks <= userBalance) {
+      // Debit the user's internal stakk balance by the amount of stakks they are withdrawing
+      store([userID, userBalance - amountStakks], "UserBalances");
+      // Save the transaction information in the PaysharesTransactions table
+      store([userID, destinationAddress, amountStakks, "pending"], "PaysharesTransactions");
     } else {
-      // If the user doesn't have enough XLM, you can alert them
+      // If the user doesn't have enough XPS, you can alert them
     }
   });
 }
 ```
 
-Then, you should run `submitPendingTransactions`, which will check `StellarTransactions` for pending transactions and submit them.
+Then, you should run `submitPendingTransactions`, which will check `PaysharesTransactions` for pending transactions and submit them.
 
 ```js
-StellarSdk.Network.useTestNetwork();
+PaysharesSdk.Network.useTestNetwork();
 // This is the function that handles submitting a single transaction
 
-function submitTransaction(exchangeAccount, destinationAddress, amountLumens) {
+function submitTransaction(exchangeAccount, destinationAddress, amountStakks) {
   // Update transaction state to sending so it won't be
   // resubmitted in case of the failure.
-  updateRecord('sending', "StellarTransactions");
+  updateRecord('sending', "PaysharesTransactions");
 
   // Check to see if the destination address exists
-  // GET https://horizon-testnet.stellar.org/accounts/{destinationAddress}
+  // GET https://horizon-testnet.payshares.org/accounts/{destinationAddress}
   server.loadAccount(destinationAddress)
     // If so, continue by submitting a transaction to the destination
     .then(function(account) {
-      var transaction = new StellarSdk.TransactionBuilder(exchangeAccount)
-        .addOperation(StellarSdk.Operation.payment({
+      var transaction = new PaysharesSdk.TransactionBuilder(exchangeAccount)
+        .addOperation(PaysharesSdk.Operation.payment({
           destination: destinationAddress,
-          asset: StellarSdk.Asset.native(),
-          amount: amountLumens
+          asset: PaysharesSdk.Asset.native(),
+          amount: amountStakks
         }))
         // Sign the transaction
         .build();
 
-      transaction.sign(StellarSdk.Keypair.fromSecret(config.baseAccountSecret));
+      transaction.sign(PaysharesSdk.Keypair.fromSecret(config.baseAccountSecret));
 
-      // POST https://horizon-testnet.stellar.org/transactions
+      // POST https://horizon-testnet.payshares.org/transactions
       return server.submitTransaction(transaction);
     })
     //But if the destination doesn't exist...
-    .catch(StellarSdk.NotFoundError, function(err) {
+    .catch(PaysharesSdk.NotFoundError, function(err) {
       // create the account and fund it
-      var transaction = new StellarSdk.TransactionBuilder(exchangeAccount)
-        .addOperation(StellarSdk.Operation.createAccount({
+      var transaction = new PaysharesSdk.TransactionBuilder(exchangeAccount)
+        .addOperation(PaysharesSdk.Operation.createAccount({
           destination: destinationAddress,
-          // Creating an account requires funding it with XLM
-          startingBalance: amountLumens
+          // Creating an account requires funding it with XPS
+          startingBalance: amountStakks
         }))
         .build();
 
-      transaction.sign(StellarSdk.Keypair.fromSecret(config.baseAccountSecret));
+      transaction.sign(PaysharesSdk.Keypair.fromSecret(config.baseAccountSecret));
 
-      // POST https://horizon-testnet.stellar.org/transactions
+      // POST https://horizon-testnet.payshares.org/transactions
       return server.submitTransaction(transaction);
     })
     // Submit the transaction created in either case
     .then(function(transactionResult) {
-      updateRecord('done', "StellarTransactions");
+      updateRecord('done', "PaysharesTransactions");
     })
     .catch(function(err) {
       // Catch errors, most likely with the network or your transaction
-      updateRecord('error', "StellarTransactions");
+      updateRecord('error', "PaysharesTransactions");
     });
 }
 
@@ -251,7 +251,7 @@ function submitPendingTransactions(exchangeAccount) {
   // See what transactions in the db are still pending
   // Update in an atomic transaction
   db.transaction(function() {
-    var pendingTransactions = querySQL("SELECT * FROM StellarTransactions WHERE state =`pending`");
+    var pendingTransactions = querySQL("SELECT * FROM PaysharesTransactions WHERE state =`pending`");
 
     while (pendingTransactions.length > 0) {
       var txn = pendingTransactions.pop();
@@ -260,7 +260,7 @@ function submitPendingTransactions(exchangeAccount) {
       // ES7 `await` keyword but you should create a "promise waterfall" so
       // `setTimeout` line below is executed after all transactions are submitted.
       // If you won't do it will be possible to send a transaction twice or more.
-      await submitTransaction(exchangeAccount, tx.destinationAddress, tx.amountLumens);
+      await submitTransaction(exchangeAccount, tx.destinationAddress, tx.amountStakks);
     }
 
     // Wait 30 seconds and process next batch of transactions.
@@ -278,6 +278,6 @@ The federation protocol allows you to give your users easy addresses—e.g., bob
 For more information, check out the [federation guide](./concepts/federation.md).
 
 ### Anchor
-If you're an exchange, it's easy to become a Stellar anchor as well. The integration points are very similar, with the same level of difficulty. Becoming a anchor could potentially expand your business.
+If you're an exchange, it's easy to become a Payshares anchor as well. The integration points are very similar, with the same level of difficulty. Becoming a anchor could potentially expand your business.
 
 To learn more about what it means to be an anchor, see the [anchor guide](./anchor.md).
